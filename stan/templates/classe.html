@@ -1,0 +1,58 @@
+<?php
+class {nomeClasse} extends BD
+{
+	<!-- BEGIN BLOCK_CAMPO -->
+	public ${campo};
+	<!-- END BLOCK_CAMPO -->
+	
+
+	function __construct(${idClasse} = NULL)
+	{
+		
+		$this->setNomeDoBanco("{nomeTabela}");
+		if(${idClasse} != NULL)
+		{
+			$this->{idClasse} = ${idClasse};
+			$this->setInfos();
+			
+			$this->setWhere("{idClasse} = ?");
+			$this->setCamposWhere(array($this->{idClasse}));
+		}
+	}
+	
+	public function setInfos()
+	{
+		global $pdo;
+		
+		$select = $pdo->prepare("SELECT * FROM {nomeTabela} WHERE {idClasse} = ?");
+		$campo	= array($this->{idClasse});
+
+		$select->execute($campo);
+		
+		$contar	= $select->rowCount(PDO::FETCH_ASSOC);
+		
+		if(!($contar == 0))
+		{
+			$exibir	= $select->fetch(PDO::FETCH_ASSOC);
+			
+			<!-- BEGIN BLOCK_CAMPO_SET -->
+			$this->{campo2} = $exibir['{campo2}'];
+			<!-- END BLOCK_CAMPO_SET -->
+			
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	public function setCampos()
+	{
+		$campos = array();
+		<!-- BEGIN BLOCK_CAMPO_CAMPO -->
+		$campos['{campo3}'] = $this->{value3};
+		<!-- END BLOCK_CAMPO_CAMPO -->
+
+		$this->setCamposDoBanco($campos);
+	}
+
+}
+?>
